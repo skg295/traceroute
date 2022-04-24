@@ -132,13 +132,10 @@ def get_route(hostname):
                     bytes = struct.calcsize("d")
                     timeSent = struct.unpack("d", recvPacket[28:28 +
                     bytes])[0]
-                    try:
-                        host_name = gethostbyaddr(ipv4(s_ip))
-                    except:
-                        hostname = "hostname not returnable"
-                    hop_ip = ipv4(s_ip)
+                    host_name = "Request timed out"
+                    hop_ip = "*"
                     timeDelta = round((timeReceived-timeSent)/100000000)
-                    tracelist1 = [hop_number, timeDelta, hop_ip, host_name[0]]
+                    tracelist1 = [hop_number, hop_ip, host_name]
                     print(tracelist1)
                     tracelist2.append(tracelist1)
                     #Fill in start
