@@ -101,9 +101,9 @@ def get_route(hostname):
                     #You should add the list above to your all traces list
                     #Fill in end
                 recvPacket, addr = mySocket.recvfrom(1024)
-                addr = ipv4(addr)
+                addr = str(addr[0])
                 try:
-                    host_name = socket.gethostbyaddr(addr)
+                    host_name = gethostbyaddr(str(addr))
                 except:
                     host_name = "hostname not returnable"
                 timeReceived = time.time()
