@@ -74,7 +74,6 @@ def get_route(hostname):
     timeLeft = TIMEOUT
     tracelist1 = [] #This is your list to use when iterating through each trace 
     tracelist2 = [] #This is your list to contain all traces
-    hop_number = 1
     #destAddr = gethostbyname(hostname)
     for ttl in range(1,MAX_HOPS):
         for tries in range(TRIES):
@@ -103,10 +102,7 @@ def get_route(hostname):
                     #Fill in end
                 recvPacket, addr = mySocket.recvfrom(1024)
                 addr = str(addr[0])
-                try:
-                    host_name = gethostbyaddr(addr)
-                except:
-                    host_name = "hostname not returnable"
+
                 timeReceived = time.time()
                 timeLeft = timeLeft - howLongInSelect
                 # time_delta = (timeReceived - timeSent) * 1000000
@@ -126,23 +122,19 @@ def get_route(hostname):
                 #Fill in end
                 icmpHeader = recvPacket[20:28]
                 types, code, checksum, packetID, sequence = struct.unpack("bbHHh", icmpHeader)
-                # # try: #try to fetch the hostname
+                try:
+                    host_name = gethostbyaddr(addr)
+                    host_name = str(host_name[0])
+                except:
+                    host_name = "hostname not returnable"
                 #     #Fill in start
                 #     #Fill in end
-                # vihl, tos, total_len, identification, flags_offset, TTL, proto, header_checksum, s_ip, d_ip = struct.unpack(
-                #         '! B B H H H B B H 4s 4s', recvPacket[:20])
-                    # print("Source IP address", ipv4(s_ip))
-
-                # except herror:   #if the host does not provide a hostname
-                #     #Fill in start
-                #     #Fill in end
-                #     print("hostname not returnable")
                 if types == 11:
                     bytes = struct.calcsize("d")
                     timeSent = struct.unpack("d", recvPacket[28:28 +
                     bytes])[0]
                     timeDelta = round((timeReceived-timeSent)/100000000)
-                    tracelist1 = [str(hop_number), str(timeDelta), str(addr), str(host_name[0])]
+                    tracelist1 = [str(ttl), str(timeDelta), str(addr), host_name]
                     print(tracelist1)
                     tracelist2.append(tracelist1)
                     #Fill in start
@@ -158,19 +150,14 @@ def get_route(hostname):
                     timeSent = struct.unpack("d", recvPacket[28:28 +
                     bytes])[0]
                     timeDelta = round((timeReceived-timeSent)/100000000)
-                    tracelist1 = [str(hop_number), str(timeDelta), str(addr), str(host_name[0])]
+                    tracelist1 = [str(ttl), str(timeDelta), str(addr), host_name]
                     print(tracelist1)
                     tracelist2.append(tracelist1)
                 elif types == 0:
                     bytes = struct.calcsize("d")
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
-                    try:
-                        host_name = gethostbyaddr(ipv4(addr))
-                    except:
-                        hostname = "hostname not returnable"
-                    hop_ip = ipv4(addr)
                     timeDelta = round((timeReceived-timeSent)/100000000)
-                    tracelist1 = [str(hop_number), str(timeDelta), str(addr), str(host_name[0])]
+                    tracelist1 = [str(ttl), str(timeDelta), str(addr), host_name]
                     tracelist2.append(tracelist1)
                     print(tracelist1)
                     print(tracelist2)
@@ -182,13 +169,14 @@ def get_route(hostname):
                     #Fill in start
                     #If there is an exception/error to your if statements, you should append that to your list here
                     #Fill in end
+                    bytes = struct.calcsize("d")
+                    timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     timeDelta = round((timeReceived - timeSent) / 100000000)
-                    tracelist1 = [hop_number, timeDelta, addr, host_name[0]]
+                    tracelist1 = [ttl, timeDelta, addr, host_name]
                     tracelist2.append(tracelist1)
                     break
             finally:
                 mySocket.close()
-        hop_number += 1
 def ipv4(addr):
     return '.'.join(map(str, addr))
 
