@@ -103,7 +103,7 @@ def get_route(hostname):
                 recvPacket, addr = mySocket.recvfrom(1024)
                 addr = str(addr[0])
                 try:
-                    host_name = gethostbyaddr(str(addr))
+                    host_name = gethostbyaddr(addr)
                 except:
                     host_name = "hostname not returnable"
                 timeReceived = time.time()
@@ -141,7 +141,7 @@ def get_route(hostname):
                     timeSent = struct.unpack("d", recvPacket[28:28 +
                     bytes])[0]
                     timeDelta = round((timeReceived-timeSent)/100000000)
-                    tracelist1 = [hop_number, timeDelta, addr, host_name]
+                    tracelist1 = [str(hop_number), str(timeDelta), str(addr), str(host_name[0])]
                     print(tracelist1)
                     tracelist2.append(tracelist1)
                     #Fill in start
@@ -157,7 +157,7 @@ def get_route(hostname):
                     timeSent = struct.unpack("d", recvPacket[28:28 +
                     bytes])[0]
                     timeDelta = round((timeReceived-timeSent)/100000000)
-                    tracelist1 = [hop_number, timeDelta, 'ms', addr, host_name]
+                    tracelist1 = [str(hop_number), str(timeDelta), str(addr), str(host_name[0])]
                     print(tracelist1)
                     tracelist2.append(tracelist1)
                 elif types == 0:
@@ -169,7 +169,7 @@ def get_route(hostname):
                         hostname = "hostname not returnable"
                     hop_ip = ipv4(addr)
                     timeDelta = round((timeReceived-timeSent)/100000000)
-                    tracelist1 = [hop_number, timeDelta, hop_ip, host_name[0]]
+                    tracelist1 = [str(hop_number), str(timeDelta), str(addr), str(host_name[0])]
                     tracelist2.append(tracelist1)
                     print(tracelist1)
                     print(tracelist2)
