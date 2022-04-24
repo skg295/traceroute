@@ -75,11 +75,11 @@ def get_route(hostname):
     tracelist1 = [] #This is your list to use when iterating through each trace 
     tracelist2 = [] #This is your list to contain all traces
     hop_number = 1
-    destAddr = gethostbyname(hostname)
+    #destAddr = gethostbyname(hostname)
     for ttl in range(1,MAX_HOPS):
         for tries in range(TRIES):
             tracelist1 = []
-            #destAddr = gethostbyname(hostname)
+            destAddr = gethostbyname(hostname)
             #Fill in start
             # Make a raw socket named mySocket
             #Fill in end
@@ -182,13 +182,8 @@ def get_route(hostname):
                     #Fill in start
                     #If there is an exception/error to your if statements, you should append that to your list here
                     #Fill in end
-                    try:
-                        host_name = gethostbyaddr(ipv4(s_ip))
-                    except:
-                        hostname = "hostname not returnable"
-                    hop_ip = ipv4(s_ip)
                     timeDelta = round((timeReceived - timeSent) / 100000000)
-                    tracelist1 = [hop_number, timeDelta, hop_ip, host_name[0]]
+                    tracelist1 = [hop_number, timeDelta, addr, host_name[0]]
                     tracelist2.append(tracelist1)
                     break
             finally:
