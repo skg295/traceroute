@@ -107,6 +107,7 @@ def get_route(hostname):
                     #Fill in start
                     #You should add the list above to your all traces list
                     #Fill in end
+
             except timeout:
                 continue
 
@@ -137,8 +138,8 @@ def get_route(hostname):
                         hostname = "hostname not returnable"
                     hop_ip = ipv4(s_ip)
                     timeDelta = round((timeReceived-timeSent)/100000000)
-                    tracelist1 = [tries, timeDelta, hop_ip, host_name]
-                    print(tracelist1)
+                    tracelist1 = [tries, timeDelta, hop_ip, host_name[0]]
+                    tracelist2.append(tracelist1)
                     #Fill in start
                     #You should add your responses to your lists here
                     #Fill in end
@@ -155,7 +156,7 @@ def get_route(hostname):
                     hop_ip = ipv4(s_ip)
                     timeDelta = round((timeReceived-timeSent)/100000000)
                     tracelist1 = [tries, timeDelta, 'ms', hop_ip, host_name]
-                    print(tracelist1)
+                    tracelist2.append(tracelist1)
                 elif types == 0:
                     bytes = struct.calcsize("d")
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
@@ -169,6 +170,9 @@ def get_route(hostname):
                     break
             finally:
                 mySocket.close()
+                print(tracelist2)
+                return (tracelist2)
+
 def ipv4(addr):
     return '.'.join(map(str, addr))
 
