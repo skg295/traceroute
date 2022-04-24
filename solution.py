@@ -103,7 +103,7 @@ def get_route(hostname):
                 recvPacket, addr = mySocket.recvfrom(1024)
                 addr = ipv4(addr)
                 try:
-                    host_name = gethostbyaddr(ipv4(addr))
+                    host_name = socket.gethostbyaddr(addr)
                 except:
                     host_name = "hostname not returnable"
                 timeReceived = time.time()
